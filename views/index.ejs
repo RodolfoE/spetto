@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title><%= title %></title>
+</head>
+
+<body>
+  <script src="javascripts/socket.js"></script>
+  <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+    integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+    crossorigin="anonymous"></script>
+
+  <script>
+    $(function () {
+      var socket = io.connect('http://localhost:3000');
+      socket.on('news', function (data) {
+        console.log(data);
+        socket.emit('my other event', { my: 'data' });
+      });
+    })
+
+
+    async function bla() {
+      try {
+        await execRequisicaoHttp('GET', '/bla2');
+      } catch (e) {
+        e = null;
+      }
+
+    }
+
+    function execRequisicaoHttp(type, url, filtro) {
+      return $.ajax({
+        type: type,
+        url: url,
+        data: filtro,
+        contentType: type === 'GET' ? 'json' : 'application/json'
+      });
+    }
+
+  </script>
+  <h1><%= title %></h1>
+  <p>Welcome asdfasdfasdf <%= title %></p>
+</body>
+
+</html>
