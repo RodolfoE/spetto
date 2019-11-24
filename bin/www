@@ -28,6 +28,10 @@ var knex = require('knex')({
     user: "root",
     password: "556556",
     database: "Spetto"
+  },
+  pool: {
+    min: 1,
+    max: 20,
   }
 });
 var io = require('socket.io')(server);
@@ -36,12 +40,14 @@ let pedido = require('../modelo/pedido');
 let praca = require('../modelo/praca');
 let usuario = require('../modelo/usuario');
 let donoPedido = require('../modelo/donoPedido');
+let pedidoController = require('../controlador/pedidoControlador')
 app.set('usuario', new usuario.Usuario(io, knex));
 app.set('itensPedido', new itensPedido.ItensPedido(knex));
 app.set('pedido', new pedido.Pedido(knex));
 //app.set('praca', new praca.Praca(knex));
 app.set('donoPedido', new donoPedido.DonoPedido(knex));
 app.set('knex', knex);
+app.set('pedidoController', new pedidoController.PedidoController(knex, pedido));
 
 /**
  * Listen on provided port, on all network interfaces.
