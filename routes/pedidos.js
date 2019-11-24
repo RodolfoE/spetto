@@ -6,20 +6,32 @@ router.post('/post_pedido_itens', async function (req, res, next) {
     let dono = req.app.get('donoPedido');
     let itensPedido = req.app.get('itensPedido');
     let pedido = req.app.get('pedido');
+    let usuario = req.app.get('usuario');
+    let knex = req.app.get('knex');
     try {
         switch (tipo_dono) {
             case 'mesa':
-                //se nao houver pedido
-                if (!id_pedido) {
-                    dono.reservarMesa(dono_pedido);
-                    id_pedido = await pedido.addPedido(dono_pedido);
-                }
-                itensPedido.addItensPedido(id_pedido, itens_pedido);
+                await knex.transaction(async function (trx) {
+                    //se nao houver pedido
+                    if (!id_pedido) {
+                        id_pedido = await pedido.addPedido(trx, dono_pedido);
+                        await dono.reservarMesa(trx, dono_pedido);
+                    }
+
+                    let itensCozinha = await itensPedido.addItensPedido(trx, id_pedido, itens_pedido);
+
+                    //informar cozinha dos itens com praça add
+                    itensCozinha.forEach(item => {
+                        usuario.notificarPracaNovoItem(item.id_praca, item);
+                    })
+                    res.send({ id_pedido: id_pedido });
+                })
+
                 break;
         }
-        res.send({ id_pedido: id_pedido });
     } catch (err) {
-        res.send(500);
+        console.log(err.message);
+        res.status(500).send(err.message);
     }
 })
 

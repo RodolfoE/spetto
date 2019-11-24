@@ -1,30 +1,42 @@
 class ItensPedido {
     constructor(knex) {
         this.knex = knex;
-    }   
+    }
 
     /**
+     * Add os itens ao pedido e retornar os itens da cozinha
      * @param {*} id_pedido pk da relação pedido
      * @param {*} itens_pedido:
      * [{ id_produto, id_responsavel, data_inicio_entrega, data_fim_entrega,
         observacao, id_responsavel_cozinha, data_inicio_cozinha, data_termino_cozinha }]
      */
-    async addItensPedido(id_pedido, itens_pedido) {
-        knex.transaction(async function (trx) {
-            //inserir itens ;de pedido na mesa
-            for (let i = 0; i < itens_pedido.length; i++) {
-                const item = itens_pedido[i];
+    async addItensPedido(trx, id_pedido, itens_pedido) {
+        let itensCozinha = [];
+        //inserir itens de pedido na mesa
+        for (let i = 0; i < itens_pedido.length; i++) {
+            const item = itens_pedido[i];
 
-                //verificar existencia de produto no pedido. 
-                let qtd = await trx.select('quantidade').from('itens_pedido').where({ id_pedido: id_pedido, id_produto: id_produto });
-                if (qtd && qtd.length) {
-                    //incrementar quantidade em 1
-                    await trx('itens_pedido').update('quantidade', ++qtd[0].quantidade);
-                } else {
-                    await trx('itens_pedido').insert(item);
-                }
+            //se item for da cozinha, guarda-lo
+            if (item.id_praca) {
+                let itemAAdd = JSON.parse(JSON.stringify(item));
+                itensCozinha.push(itemAAdd);
+                delete item.id_praca;
             }
-        })
+
+            //verificar se produto já exite na lista de pedido. Caso não, ele será o primeiro a ser add
+            let ordemItem = await trx.max('ordem').from('itens_pedido').where({ id_pedido: id_pedido, id_produto: item.id_produto });
+            if (ordemItem && ordemItem.length){
+                item.ordem = ++ordemItem[0].ordem;
+            } else {
+                item.ordem = 0;
+            }           
+
+            //inserir id_pedido no item
+            item.id_pedido = id_pedido;
+            await trx('itens_pedido').insert(item);
+
+        }
+        return itensCozinha;
     }
 }
 exports.ItensPedido = ItensPedido;

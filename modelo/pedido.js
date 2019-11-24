@@ -4,8 +4,8 @@ class Pedido {
         this.knex = knex;
     }
 
-    async addPedido(id_dono) {
-        const idPedido = (await this.knex('pedido').insert({ id_dono: id_dono, data_pedido: utils.get_date_mysql(new Date().toISOString()) }));
+    async addPedido(trx, id_dono) {
+        const idPedido = (await trx('pedido').insert({ id_dono: id_dono, data_pedido: utils.get_date_mysql(new Date().toISOString()) }));
         return idPedido[0];
     }
 }

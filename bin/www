@@ -41,7 +41,7 @@ app.set('itensPedido', new itensPedido.ItensPedido(knex));
 app.set('pedido', new pedido.Pedido(knex));
 //app.set('praca', new praca.Praca(knex));
 app.set('donoPedido', new donoPedido.DonoPedido(knex));
-
+app.set('knex', knex);
 
 /**
  * Listen on provided port, on all network interfaces.

@@ -15,16 +15,25 @@
   <script>
     $(function () {
       var socket = io.connect('http://localhost:3000');
-      socket.on('news', function (data) {
+      socket.on('NovoItemPraca1', function (data) {
         console.log(data);
-        socket.emit('my other event', { my: 'data' });
       });
     })
 
 
     async function bla() {
       try {
-        await execRequisicaoHttp('GET', '/bla2');
+        await execRequisicaoHttp('POST', '/pedidos/post_pedido_itens', JSON.stringify({
+          dono_pedido: 1,
+          tipo_dono: "mesa",
+          itens_pedido: [{
+            id_produto: 1,
+            id_responsavel: 1,
+            data_inicio_entrega: "2019-11-15 15:17:17",
+            observacao: "Carne mau passada",
+            id_praca: 1
+          }]
+        }));
       } catch (e) {
         e = null;
       }
