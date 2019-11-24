@@ -21,22 +21,32 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
-
-var io = require('socket.io')(server);
-io.on('connection', function (socket) {
-  console.log('cheguei aki');
-  socket.on('my other event', function (data) {
-    
-  });
+var knex = require('knex')({
+  client: 'mysql',
+  connection: {
+    host: "localhost",
+    user: "root",
+    password: "556556",
+    database: "Spetto"
+  }
 });
-
-app.set('socket', io);
+var io = require('socket.io')(server);
+let itensPedido = require('../modelo/itensPedido');
+let pedido = require('../modelo/pedido');
+let praca = require('../modelo/praca');
+let usuario = require('../modelo/usuario');
+let donoPedido = require('../modelo/donoPedido');
+app.set('usuario', new usuario.Usuario(io, knex));
+app.set('itensPedido', new itensPedido.ItensPedido(knex));
+app.set('pedido', new pedido.Pedido(knex));
+//app.set('praca', new praca.Praca(knex));
+app.set('donoPedido', new donoPedido.DonoPedido(knex));
 
 
 /**
  * Listen on provided port, on all network interfaces.
  */
-
+console.log('Porta em uso: ', port);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
