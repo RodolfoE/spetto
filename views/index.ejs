@@ -24,6 +24,7 @@
     async function bla() {
       try {
         await execRequisicaoHttp('POST', '/pedidos/post_pedido_itens', JSON.stringify({
+          id_pedido: 23,
           dono_pedido: 1,
           tipo_dono: "mesa",
           itens_pedido: [{

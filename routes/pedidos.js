@@ -17,16 +17,13 @@ router.post('/post_pedido_itens', async function (req, res, next) {
                         id_pedido = await pedido.addPedido(trx, dono_pedido);
                         await dono.reservarMesa(trx, dono_pedido);
                     }
-
                     let itensCozinha = await itensPedido.addItensPedido(trx, id_pedido, itens_pedido);
-
                     //informar cozinha dos itens com praça add
                     itensCozinha.forEach(item => {
                         usuario.notificarPracaNovoItem(item.id_praca, item);
                     })
                     res.send({ id_pedido: id_pedido });
-                })
-
+                });
                 break;
         }
     } catch (err) {

@@ -1,3 +1,4 @@
+const utils = require('./../helpers/utils');
 class ItensPedido {
     constructor(knex) {
         this.knex = knex;
@@ -24,9 +25,9 @@ class ItensPedido {
             }
 
             //verificar se produto já exite na lista de pedido. Caso não, ele será o primeiro a ser add
-            let ordemItem = await trx.max('ordem').from('itens_pedido').where({ id_pedido: id_pedido, id_produto: item.id_produto });
-            if (ordemItem && ordemItem.length){
-                item.ordem = ++ordemItem[0].ordem;
+            let ordemItem =  utils.firstOrDefault(await trx.max('ordem as maior').from('itens_pedido').where({ id_pedido: id_pedido, id_produto: item.id_produto }));
+            if (ordemItem){
+                item.ordem = ++ordemItem.maior;
             } else {
                 item.ordem = 0;
             }           
@@ -34,7 +35,6 @@ class ItensPedido {
             //inserir id_pedido no item
             item.id_pedido = id_pedido;
             await trx('itens_pedido').insert(item);
-
         }
         return itensCozinha;
     }
