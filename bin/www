@@ -22,12 +22,12 @@ app.set('port', port);
 
 var server = http.createServer(app);
 var knex = require('knex')({
-  client: 'mysql',
+  client: 'mssql',
   connection: {
     host: "localhost",
-    user: "root",
-    password: "556556",
-    database: "Spetto"
+    user: "Administrador",
+    password: "/nd.%-czYjE3",
+    database: "spetto"
   },
   pool: {
     min: 1,
@@ -47,7 +47,6 @@ app.set('pedido', new pedido.Pedido(knex));
 //app.set('praca', new praca.Praca(knex));
 app.set('donoPedido', new donoPedido.DonoPedido(knex));
 app.set('knex', knex);
-app.set('pedidoController', new pedidoController.PedidoController(knex, pedido));
 
 /**
  * Listen on provided port, on all network interfaces.

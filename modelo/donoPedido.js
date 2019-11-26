@@ -1,10 +1,11 @@
+const utils = require('./../helpers/utils');
 class DonoPedido{
     constructor(knex){
         this.knex = knex;
     }
     
     async reservarMesa(trx, num_mesa){
-        let em_uso = (await trx.select('em_uso').from('mesa').where('id_dono', num_mesa))[0];
+        let em_uso =  utils.firstOrDefault(await trx.select('em_uso').from('mesa').where('id_dono', num_mesa));
         if (em_uso === undefined || em_uso === null) {
             throw Error('Mesa não existe.');
         }
