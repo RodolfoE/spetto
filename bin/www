@@ -40,12 +40,14 @@ let pedido = require('../modelo/pedido');
 let praca = require('../modelo/praca');
 let usuario = require('../modelo/usuario');
 let donoPedido = require('../modelo/donoPedido');
+let produto = require('../modelo/produtos');
 let pedidoController = require('../controlador/pedidoControlador')
 app.set('usuario', new usuario.Usuario(io, knex));
 app.set('itensPedido', new itensPedido.ItensPedido(knex));
 app.set('pedido', new pedido.Pedido(knex));
 //app.set('praca', new praca.Praca(knex));
 app.set('donoPedido', new donoPedido.DonoPedido(knex));
+app.set('produto', new produto.Produto(knex));
 app.set('knex', knex);
 
 /**

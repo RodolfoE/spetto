@@ -21,7 +21,7 @@
     })
 
 
-    async function bla() {
+    async function driverPost_pedido_itens() {
       try {
         await execRequisicaoHttp('POST', '/pedidos/post_pedido_itens', JSON.stringify({
           id_pedido: 23,
@@ -38,7 +38,15 @@
       } catch (e) {
         e = null;
       }
+    }
 
+    async function driverget_produtos() {
+      try {
+        let produtos = await execRequisicaoHttp('GET', '/produto/get_produtos', {});
+        console.log(produtos);
+      } catch (e) {
+        e = null;
+      }
     }
 
     function execRequisicaoHttp(type, url, filtro) {
