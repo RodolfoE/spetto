@@ -42,11 +42,15 @@
 
     async function driverget_produtos() {
       try {
-        let produtos = await execRequisicaoHttp('GET', '/produto/get_produtos', {});
+        let produtos = await execRequisicaoHttp('GET', '/produto/get_produtos', { where: { id_praca: 1, nome: "Carne de sol" }, select: 'nome' });
         console.log(produtos);
       } catch (e) {
         e = null;
       }
+    }
+
+    async function driverCadastroProduto() {
+      await execRequisicaoHttpCtType('POST', '/produto/post_produto', )
     }
 
     function execRequisicaoHttp(type, url, filtro) {
@@ -58,9 +62,22 @@
       });
     }
 
+    function execRequisicaoHttpCtType(type, url, filtro, contentType) {
+      return $.ajax({
+        type: type,
+        url: url,
+        data: filtro,
+        contentType: contentType
+      });
+    }
+
   </script>
   <h1><%= title %></h1>
   <p>Welcome asdfasdfasdf <%= title %></p>
+  <form action="/produto/post_produto" method="post" enctype="multipart/form-data">
+    <input type="file" name="avatar" />
+    <button type="submit" name="sobes" id="">Exec Requisição</button>
+  </form>
 </body>
 
 </html>
