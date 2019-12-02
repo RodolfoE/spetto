@@ -20,6 +20,14 @@
       });
     })
 
+    async function obter_itens_pendentes(id_praca) {
+      try {
+        let itensPendentes = await execRequisicaoHttp('GET', '/praca/obter_itens_pendentes', { id_praca: id_praca });
+        console.log(itensPendentes);
+      } catch (e) {
+        e = null;
+      }
+    }
 
     async function driverPost_pedido_itens() {
       try {
@@ -42,7 +50,7 @@
 
     async function driverget_produtos() {
       try {
-        let produtos = await execRequisicaoHttp('GET', '/produto/get_produtos', { where: { id_praca: 1, nome: "Carne de sol" }, select: 'nome' });
+        let produtos = await execRequisicaoHttp('GET', '/produto/get_produtos', { /*where: { id_praca: 1, nome: "Carne de sol" }, */select: 'p.id_produto, nome, tempo_medio_preparo, id_praca, valor' });
         console.log(produtos);
       } catch (e) {
         e = null;
@@ -50,7 +58,15 @@
     }
 
     async function driverCadastroProduto() {
-      await execRequisicaoHttpCtType('POST', '/produto/post_produto', )
+      try {
+        await execRequisicaoHttpCtType('POST', '/produto/post_produto', {
+          nome: 'Carne',
+          id_praca: 1,
+          preco: 11
+        });
+      } catch (e) {
+        console.log(e);
+      }
     }
 
     function execRequisicaoHttp(type, url, filtro) {

@@ -17,20 +17,19 @@ class ItensPedido {
         for (let i = 0; i < itens_pedido.length; i++) {
             const item = itens_pedido[i];
 
-            //se item for da cozinha, guarda-lo
-            if (item.id_praca) {
-                let itemAAdd = JSON.parse(JSON.stringify(item));
-                itensCozinha.push(itemAAdd);
-                delete item.id_praca;
-            }
-
             //verificar se produto já exite na lista de pedido. Caso não, ele será o primeiro a ser add
-            let ordemItem =  utils.firstOrDefault(await trx.max('ordem as maior').from('itens_pedido').where({ id_pedido: id_pedido, id_produto: item.id_produto }));
-            if (ordemItem){
+            let ordemItem = utils.firstOrDefault(await trx.max('ordem as maior').from('itens_pedido').where({ id_pedido: id_pedido, id_produto: item.id_produto }));
+            if (ordemItem) {
                 item.ordem = ++ordemItem.maior;
             } else {
                 item.ordem = 0;
-            }           
+            }
+
+            //se item for da cozinha, guarda-lo
+            if (item.id_praca) {
+                itensCozinha.push({ id_produto: item.id_produto, ordem: item.ordem });
+                delete item.id_praca;
+            }
 
             //inserir id_pedido no item
             item.id_pedido = id_pedido;
@@ -38,5 +37,27 @@ class ItensPedido {
         }
         return itensCozinha;
     }
+    /**
+     * Obtem os produtos passados por parametros do pedido
+     * @param {*} trx 
+     * @param {int} id_pedidos 
+     * @param {array object} produtos 
+     */
+    async obterItensDoPedido(trx, id_pedido, produtos) {
+        let retorno = [];
+        for (let i = 0; i < produtos.length; i++) {
+            const prod = produtos[i];
+            let consulta = await trx.from('itens_pedido')
+                .join('produto', 'itens_pedido.id_produto', '=', 'produto.id_produto')
+                .where('id_pedido', id_pedido)
+                .where('itens_pedido.id_produto', prod.id_produto)
+                .where('ordem', prod.ordem);
+            retorno.push(utils.firstOrDefault(consulta));
+        }
+        return retorno;
+    }
+
 }
+
 exports.ItensPedido = ItensPedido;
+

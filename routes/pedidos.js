@@ -18,10 +18,20 @@ router.post('/post_pedido_itens', async function (req, res, next) {
                         await dono.reservarMesa(trx, dono_pedido);
                     }
                     let itensCozinha = await itensPedido.addItensPedido(trx, id_pedido, itens_pedido);
-                    //informar cozinha dos itens com praça add
-                    itensCozinha.forEach(item => {
-                        usuario.notificarPracaNovoItem(item.id_praca, item);
-                    })
+
+                    if (itensCozinha.length > 0) {
+                        //informar cozinha dos itens com praça add
+                        let produtos = await itensPedido.obterItensDoPedido(trx, id_pedido, itensCozinha);
+                        
+                        //notiifar usuários das praças
+                        notificacaoPorPraca = produtos.map(x => x.id_praca);
+                        notificacaoPorPraca.forEach(praca => {
+                            let itensDaPraca = produtos.filter(prod => prod.id_praca = praca);
+                            usuario.notificarPracaNovoItem(praca, itensDaPraca);    
+                        });
+                    }
+
+                    //informar usuário conclusão da inserção dos itens de pediddo.
                     res.send({ id_pedido: id_pedido });
                 });
                 break;

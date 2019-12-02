@@ -4,8 +4,8 @@ class Usuario {
         this.knex = knex;
     }
 
-    async notificarPracaNovoItem(id_praca, item){
-        this.io.sockets.emit(`NovoItemPraca${id_praca}`, item);   
+    async notificarPracaNovoItem(id_praca, produtos){
+        this.io.sockets.emit(`NovoItemPraca${id_praca}`, produtos);   
     }
  
     teste() {
