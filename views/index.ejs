@@ -18,7 +18,31 @@
       socket.on('NovoItemPraca1', function (data) {
         console.log(data);
       });
+
+      socket.on('pedidoCozido1', function (data) {
+        console.log(data);
+      });
+
+      socket.on('pedidoAcatado1', function (data) {
+        console.log(data);
+      });
     })
+
+    async function pedido_concluido(id_pedido, id_produto, ordem, id_responsavel) {
+      try {
+        await execRequisicaoHttp('GET', '/praca/pedido_concluido', { id_pedido, id_produto, ordem, id_responsavel });
+      } catch (e) {
+        e = null;
+      }
+    }
+
+    async function pedido_acatado(id_pedido, id_produto, ordem, id_responsavel_cozinha, id_responsavel) {
+      try {
+        await execRequisicaoHttp('GET', '/praca/pedido_acatado_cozinha', { id_pedido, id_produto, ordem, id_responsavel_cozinha, id_responsavel });
+      } catch (e) {
+        e = null;
+      }
+    }
 
     async function obter_itens_pendentes(id_praca) {
       try {
@@ -50,7 +74,7 @@
 
     async function driverget_produtos() {
       try {
-        let produtos = await execRequisicaoHttp('GET', '/produto/get_produtos', { /*where: { id_praca: 1, nome: "Carne de sol" }, */select: 'p.id_produto, nome, tempo_medio_preparo, id_praca, valor' });
+        let produtos = await execRequisicaoHttp('GET', '/produto/get_produtos'/*, { where: { nome: 'Carne de sol' }, select: 'p.id_produto, nome, tempo_medio_preparo, id_praca, valor' }*/);
         console.log(produtos);
       } catch (e) {
         e = null;
