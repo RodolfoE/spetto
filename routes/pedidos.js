@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 router.post('/post_pedido_itens', async function (req, res, next) {
-    let { dono_pedido, tipo_dono, id_pedido, itens_pedido } = req.body;
+    let { dono_pedido, tipo_dono, id_responsavel, id_pedido, itens_pedido } = req.body;
     let dono = req.app.get('donoPedido');
     let itensPedido = req.app.get('itensPedido');
     let pedido = req.app.get('pedido');
@@ -17,7 +17,7 @@ router.post('/post_pedido_itens', async function (req, res, next) {
                         id_pedido = await pedido.addPedido(trx, dono_pedido);
                         await dono.reservarMesa(trx, dono_pedido);
                     }
-                    let itensCozinha = await itensPedido.addItensPedido(trx, id_pedido, itens_pedido);
+                    let itensCozinha = await itensPedido.addItensPedido(trx, id_pedido, id_responsavel, itens_pedido);
 
                     if (itensCozinha.length > 0) {
                         //informar cozinha dos itens com praça add

@@ -11,27 +11,27 @@ create table Spetto.mesa (
 )
 
 create table Spetto.cliente (
-	id_dono int not null,
-    id_cliente int  not null auto_increment,
+	id_cliente int  not null auto_increment,
+    id_dono int not null,    
     nome varchar(100) NOT NULL,
-    foreign key (id_dono) references dono_pedido (id_dono),
-    primary key (id_dono, id_cliente)
+    primary key (id_cliente, id_dono),
+    foreign key (id_dono) references Spetto.dono_pedido (id_dono)    
 )
 
-create table cliente_delivery(
-	id_dono int not null,
-    id_cliente int not null auto_increment,
+create table cliente_delivery( 
+	id_cliente int not null auto_increment,
+    id_dono int not null,    
     nome nvarchar(300) not null,
     id_contato int not null,
     id_endereco int not null,
     id_responsavel int not null,
     id_entregador int not null,
+    primary key (id_cliente,id_dono),
     foreign key (id_dono) references dono_pedido (id_dono),
     foreign key (id_contato) references contato (id_contato),
     foreign key (id_endereco) references endereco (id_endereco),
     foreign key (id_responsavel) references usuario (id_usuario),
-    foreign key (id_entregador) references usuario (id_usuario),
-	primary key (id_dono, id_cliente)
+    foreign key (id_entregador) references usuario (id_usuario)	
 )
 
 create table Spetto.papel(
@@ -40,12 +40,12 @@ create table Spetto.papel(
     primary key (id_papel, cargo)
 )
 
-create table papeis{
+create table papeis(
 	id_papel int not null,
     id_usuario int not null,
-    foreign key (id_papel) references papeu (id_papel),
+    foreign key (id_papel) references papel (id_papel),
     foreign key (id_usuario) references usuario (id_usuario)
-}
+)
 
 create table Spetto.endereco(
 	id_endereco int not null auto_increment,
@@ -125,7 +125,8 @@ create table itens_pedido(
  id_responsavel_cozinha int,
  data_inicio_cozinha date,
  data_termino_cozinha date,
- primary key (id_pedido, id_produto),
+ ordem int not null,
+ primary key (id_pedido, id_produto, ordem),
  foreign key (id_responsavel) references usuario (id_usuario),
  foreign key (id_responsavel_cozinha) references usuario (id_usuario),
  foreign key (id_produto) references produto (id_produto)

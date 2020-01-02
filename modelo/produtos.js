@@ -31,11 +31,12 @@ class Produto {
         //const query = this.knex('produto').select().leftJoin('preco', 'preco.id_produto', 'produto.id_produto');
         let whereClause = '';
         if (where){
+            where = JSON.parse(where);
             whereClause = 'where ';
             let condicoes = Object.keys(where);
             for (let i = 0; i < condicoes.length; i++) {
                 const element = condicoes[i];
-                whereClause += element + "=" + "'" + where[element] + "'";
+                whereClause += element + " like " + "'%" + where[element] + "%'";
                 if (i != condicoes.length - 1) {
                     whereClause += ' AND ';
                 }

@@ -11,7 +11,7 @@ class ItensPedido {
      * [{ id_produto, id_responsavel, data_inicio_entrega, data_fim_entrega,
         observacao, id_responsavel_cozinha, data_inicio_cozinha, data_termino_cozinha }]
      */
-    async addItensPedido(trx, id_pedido, itens_pedido) {
+    async addItensPedido(trx, id_pedido, id_responsavel, itens_pedido) {
         let itensCozinha = [];
         //inserir itens de pedido na mesa
         for (let i = 0; i < itens_pedido.length; i++) {
@@ -33,7 +33,13 @@ class ItensPedido {
 
             //inserir id_pedido no item
             item.id_pedido = id_pedido;
-            await trx('itens_pedido').insert(item);
+            await trx('itens_pedido').insert(
+                {
+                    id_pedido: item.id_pedido,
+                    id_produto: item.id_produto,
+                    ordem: item.ordem,
+                    id_responsavel: id_responsavel
+                });
         }
         return itensCozinha;
     }
