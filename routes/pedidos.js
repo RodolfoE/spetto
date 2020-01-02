@@ -1,3 +1,4 @@
+const utils = require('./../helpers/utils');
 var express = require('express');
 var router = express.Router();
 
@@ -9,6 +10,8 @@ router.post('/post_pedido_itens', async function (req, res, next) {
     let usuario = req.app.get('usuario');
     let knex = req.app.get('knex');
     try {
+        itens_pedido = utils.quantificarArray(itens_pedido);
+
         switch (tipo_dono) {
             case 'mesa':
                 await knex.transaction(async function (trx) {

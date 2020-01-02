@@ -15,12 +15,8 @@ INSERT INTO `Spetto`.`preco` (`id_produto`, `valor`, `dataCorrente`) VALUES (1, 
 INSERT INTO `Spetto`.`preco` (`id_produto`, `valor`, `dataCorrente`) VALUES (2, 22.5, "2019-12-12");
 INSERT INTO `Spetto`.`preco` (`id_produto`, `valor`, `dataCorrente`) VALUES (6, 12, "2019-12-12");
 select * from produto, preco where produto.id_produto = preco.id_produto
-
 select * from produto
 alter table produto add categoria nvarchar(max)
-
-
-
 select * from produto group
 
 
