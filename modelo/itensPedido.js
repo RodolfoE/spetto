@@ -51,19 +51,26 @@ class ItensPedido {
      */
     async obterItensDoPedido(trx, id_pedido, produtos) {
         let retorno = [];
-        for (let i = 0; i < produtos.length; i++) {
-            const prod = produtos[i];
-            let consulta = await trx.from('itens_pedido')
-                .join('produto', 'itens_pedido.id_produto', '=', 'produto.id_produto')
-                .where('id_pedido', id_pedido)
-                .where('itens_pedido.id_produto', prod.id_produto)
-                .where('ordem', prod.ordem);
-            retorno.push(utils.firstOrDefault(consulta));
-        }
+        if (typeof produtos == 'object')
+            for (let i = 0; i < produtos.length; i++) {
+                const prod = produtos[i];
+                let consulta = await trx.from('itens_pedido')
+                    .join('produto', 'itens_pedido.id_produto', '=', 'produto.id_produto')
+                    .where('id_pedido', id_pedido)
+                    .where('itens_pedido.id_produto', prod.id_produto)
+                    .where('ordem', prod.ordem);
+                retorno.push(utils.firstOrDefault(consulta));
+            }
+        else 
+            if (!produtos)
+                retorno = await trx.from('itens_pedido')
+                    .where('id_pedido', id_pedido)
+            else 
+                retorno = await trx.from('itens_pedido')
+                    .where('id_pedido', id_pedido)
+                    .where('itens_pedido.id_produto', produtos)
         return retorno;
     }
-
 }
-
 exports.ItensPedido = ItensPedido;
 

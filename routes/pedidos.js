@@ -25,12 +25,12 @@ router.post('/post_pedido_itens', async function (req, res, next) {
                     if (itensCozinha.length > 0) {
                         //informar cozinha dos itens com praça add
                         let produtos = await itensPedido.obterItensDoPedido(trx, id_pedido, itensCozinha);
-                        
+
                         //notiifar usuários das praças
                         notificacaoPorPraca = produtos.map(x => x.id_praca);
                         notificacaoPorPraca.forEach(praca => {
                             let itensDaPraca = produtos.filter(prod => prod.id_praca = praca);
-                            usuario.notificarPracaNovoItem(praca, itensDaPraca);    
+                            usuario.notificarPracaNovoItem(praca, itensDaPraca);
                         });
                     }
 
@@ -39,6 +39,19 @@ router.post('/post_pedido_itens', async function (req, res, next) {
                 });
                 break;
         }
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send(err.message);
+    }
+})
+
+router.get('/obter_itens_pedido', async (req, res) => {
+    let { id_pedido } = req.query;
+    try {
+        let knex = req.app.get('knex');
+        let itensPedido = req.app.get('itensPedido');
+        let itens = await itensPedido.obterItensDoPedido(knex, id_pedido);
+        res.send(itens);
     } catch (err) {
         console.log(err.message);
         res.status(500).send(err.message);
