@@ -17,6 +17,14 @@ class DonoPedido{
         }
     }
 
+    async obterMesa(knex, num_mesa){
+        let query = knex.from('mesa');
+        if (num_mesa){
+            query.where('id_mesa', num_mesa);
+        }
+        let mesa = await query;
+    }
+
     async cadastrarCliente(){
         
     }
