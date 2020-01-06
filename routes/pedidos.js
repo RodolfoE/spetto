@@ -62,7 +62,22 @@ router.get('/obter_mesas', async (req, res) => {
     let { id_mesa } = req.query;
     try {
         let dono = req.app.get('donoPedido');
-        let mesas = await dono.obterMesa(id_mesa);
+        let knex = req.app.get('knex');
+        let mesas = await dono.obterMesa(knex, id_mesa);
+        res.send(mesas);
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send(err.message);
+    }
+})
+
+
+router.get('/obter_clientes', async (req, res) => {
+    let { id_mesa } = req.query;
+    try {
+        let dono = req.app.get('donoPedido');
+        let knex = req.app.get('knex');
+        let mesas = await dono.obterCliente(knex, id_mesa);
         res.send(mesas);
     } catch (err) {
         console.log(err.message);

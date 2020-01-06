@@ -23,6 +23,16 @@ class DonoPedido{
             query.where('id_mesa', num_mesa);
         }
         let mesa = await query;
+        return mesa;
+    }
+    
+    async obterCliente(knex, idCliente){
+        let query = knex.from('cliente');
+        if (num_mesa){
+            query.where('id_mesa', idCliente);
+        }
+        let mesa = await query;
+        return mesa;
     }
 
     async cadastrarCliente(){
