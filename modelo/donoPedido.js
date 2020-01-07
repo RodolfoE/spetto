@@ -20,7 +20,7 @@ class DonoPedido{
     async obterMesa(knex, num_mesa){
         let query = knex.from('mesa');
         if (num_mesa){
-            query.where('id_mesa', num_mesa);
+            query.where('id_dono', num_mesa);
         }
         let mesa = await query;
         return mesa;
@@ -28,11 +28,20 @@ class DonoPedido{
     
     async obterCliente(knex, idCliente){
         let query = knex.from('cliente');
-        if (num_mesa){
-            query.where('id_mesa', idCliente);
+        if (idCliente){
+            query.where('id_dono', idCliente);
         }
         let mesa = await query;
         return mesa;
+    }
+
+    async obterClientesDelivery(knex, idClienteDel){
+        let query = knex.from('cliente_delivery');
+        if (idClienteDel){
+            query.where('id_dono', idClienteDel);
+        }
+        let cliente = await query;
+        return cliente;
     }
 
     async cadastrarCliente(){
