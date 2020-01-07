@@ -1,3 +1,4 @@
+alter table pedido add column id_dono int not null 
 create table Spetto.dono_pedido(
 	id_dono int not null auto_increment,
     primary key (id_dono)
