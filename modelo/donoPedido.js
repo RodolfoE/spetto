@@ -20,7 +20,7 @@ class DonoPedido{
     async obterMesa(knex, num_mesa){
         let query = knex.from('mesa').join('dono_pedido', 'mesa.id_dono', 'dono_pedido.id_dono').leftJoin('pedido', 'pedido.id_dono', 'dono_pedido.id_dono');
         if (num_mesa){
-            query.where('cliente_delivery.id_dono', num_mesa);
+            query.where('mesa.num_mesa', num_mesa);
         }
         query.orderBy('em_uso', 'desc')
         let mesa = await query;
