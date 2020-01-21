@@ -18,11 +18,14 @@ class Pedido {
          */
     }
 
-    /*
-    async addPedido(trx, id_dono) {
-        const idPedido = await trx('pedido').insert({ id_dono: id_dono, data_pedido: new Date().toISOString() }).returning('id_pedido');
-        return utils.firstOrDefault(idPedido);
-    }*/
+    async addOuAtualizarVenda(trx, idPedido, total, data, qt_pago, fechado, nota, sugestao) {
+        let temVendaCadastrada = await trx('venda').where({ id_pedido: idPedido });
+        if (temVendaCadastrada.length) {
+            await trx('venda').update({ total: total, qt_pago: temVendaCadastrada.qt_pago + qt_pago, fechado: fechado, nota, sugestao }).where({ id_pedido: idPedido });
+        } else {
+            await trx('venda').insert({ id_Pedido: id_Pedido, total, data, qt_pago, fechado, nota, sugestao })
+        }
+    }
 
     async addCliente(knex, nome, telefone, fiel) {
         const idDono = await knex('dono_pedido').insert({});

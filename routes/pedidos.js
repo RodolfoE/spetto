@@ -45,6 +45,14 @@ router.post('/post_pedido_itens', async function (req, res, next) {
     }
 })
 
+router.get('/fechar_pedido', async (req, res) => {
+    const { id_pedido, total, qt_pago, fechado, nota, sugestao } = req.query;
+    let data = utils.get_date_mysql(new Date().toISOString());
+    try{
+
+    }
+})
+
 router.get('/obter_itens_pedido', async (req, res) => {
     let { id_pedido } = req.query;
     try {
