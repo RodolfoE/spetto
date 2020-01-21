@@ -58,4 +58,69 @@ router.get('/obter_itens_pedido', async (req, res) => {
     }
 })
 
+router.get('/obter_mesas', async (req, res) => {
+    let { id_mesa } = req.query;
+    try {
+        let dono = req.app.get('donoPedido');
+        let knex = req.app.get('knex');
+        let mesas = await dono.obterMesa(knex, id_mesa);
+        res.send(mesas);
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send(err.message);
+    }
+})
+
+router.get('/obter_clientes', async (req, res) => {
+    let { idCliente } = req.query;
+    try {
+        let dono = req.app.get('donoPedido');
+        let knex = req.app.get('knex');
+        let mesas = await dono.obterCliente(knex, idCliente);
+        res.send(mesas);
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send(err.message);
+    }
+})
+
+router.get('/obter_clientes_delivery', async (req, res) => {
+    let { idCliente } = req.query;
+    try {
+        let dono = req.app.get('donoPedido');
+        let knex = req.app.get('knex');
+        let cliDelivery = await dono.obterClientesDelivery(knex, idCliente);
+        res.send(cliDelivery);
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send(err.message);
+    }
+})
+
+router.post('/cadastrar_cliente', async (req, res) => {
+    let { nome, fiel, telefone } = req.body;
+    try {
+        let knex = req.app.get('knex');
+        let pedido = req.app.get('pedido');
+        const cliente = await pedido.addCliente(knex, nome, telefone, fiel);
+        res.send({ id_dono: cliente });
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send(err.message);
+    }
+})
+
+router.post('/cadastrar_mesa', async (req, res) => {
+    let { id_mesa } = req.body;
+    try {
+        let knex = req.app.get('knex');
+        let pedido = req.app.get('pedido');
+        const mesa = await pedido.addMesa(knex, id_mesa);
+        res.send({ id_dono: mesa });
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send(err.message);
+    }
+})
+
 module.exports = router;

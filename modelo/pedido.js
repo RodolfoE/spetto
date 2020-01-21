@@ -6,7 +6,11 @@ class Pedido {
 
     async addPedido(trx, id_dono) {
         const idPedido = (await trx('pedido').insert({ id_dono: id_dono, data_pedido: utils.get_date_mysql(new Date().toISOString()) }));
+<<<<<<< HEAD
         return utils.firstOrDefault(idPedido);        
+=======
+        return idPedido[0];
+>>>>>>> 4e62a0d9db4fab7ef380e77587009ac602346e23
     }
 
     async obterVlrTotalProd() {
@@ -17,11 +21,31 @@ class Pedido {
                 where p.id_praca = 1
          */
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4e62a0d9db4fab7ef380e77587009ac602346e23
     /*
     async addPedido(trx, id_dono) {
         const idPedido = await trx('pedido').insert({ id_dono: id_dono, data_pedido: new Date().toISOString() });
         return utils.firstOrDefault(idPedido);
     }*/
+<<<<<<< HEAD
+=======
+
+    async addCliente(knex, nome, telefone, fiel) {
+        const idDono = await knex('dono_pedido').insert({});
+        await knex('cliente').insert({ id_cliente: utils.firstOrDefault(idDono), id_dono: utils.firstOrDefault(idDono), nome: nome, telefone: telefone, fiel: fiel });
+        return utils.firstOrDefault(idDono);
+    }
+
+
+    async addMesa(knex, id_mesa) {
+        const idDono = await knex('dono_pedido').insert({});
+        await knex('mesa').insert({ id_mesa: id_mesa, id_dono: utils.firstOrDefault(idDono), em_uso: 0 });
+        return utils.firstOrDefault(idDono);
+    }
+>>>>>>> 4e62a0d9db4fab7ef380e77587009ac602346e23
 }
 exports.Pedido = Pedido;
 
