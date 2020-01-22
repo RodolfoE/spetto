@@ -18,12 +18,16 @@ class Pedido {
          */
     }
 
-    async addOuAtualizarVenda(trx, idPedido, total, data, qt_pago, fechado, nota, sugestao) {
-        let temVendaCadastrada = await trx('venda').where({ id_pedido: idPedido });
-        if (temVendaCadastrada.length)
-            await trx('venda').update({ total: total, qt_pago: temVendaCadastrada.qt_pago + qt_pago, fechado: fechado, nota, sugestao }).where({ id_pedido: idPedido });
-        else
-            await trx('venda').insert({ id_Pedido: idPedido, total, data, qt_pago, fechado, nota, sugestao });
+    async addOuAtualizarVenda(trx, id_pedido, total, data, qt_pago, fechado, id_forma, nota, sugestao) {
+        let temVendaCadastrada = await trx('venda').where({ id_pedido });
+        if (temVendaCadastrada.length) {
+            await trx('venda').update({ total: total, qt_pago: temVendaCadastrada.qt_pago + qt_pago, fechado, nota, sugestao }).where({ id_pedido });
+            await trx('formas_pagamento').insert({ id_pedido, id_forma, valor: qt_pago })
+        }
+        else {
+            await trx('venda').insert({ id_Pedido: id_pedido, total, data, qt_pago, fechado, nota, sugestao });
+            await trx('formas_pagamento').insert({ id_pedido, id_forma, valor: qt_pago })
+        }
     }
 
     async addCliente(knex, nome, telefone, fiel) {
@@ -46,6 +50,14 @@ class Pedido {
 
     async alterarEmUsoMesa(knex, id_dono, emUso) {
         await knex('mesa').update({ em_uso: emUso ? 1 : 0 }).where(id_dono);
+    }
+
+    async obterFormasPagamento(knex, where) {
+        let query = knex('pagamento');
+        if (where)
+            query.where(where);
+        let item = await query;
+        return item;
     }
 }
 exports.Pedido = Pedido;
