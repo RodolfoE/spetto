@@ -46,7 +46,7 @@ router.post('/post_pedido_itens', async function (req, res, next) {
 })
 
 router.get('/fechar_pedido', async (req, res) => {
-    const { id_pedido, total, qt_pago, fechado, nota, sugestao } = req.query;
+    const { id_pedido, id_forma, total, qt_pago, fechado, nota, sugestao } = req.query;
     let data = utils.get_date_mysql(new Date().toISOString());
     let pedido = req.app.get('pedido');
     let knex = req.app.get('knex');
@@ -54,7 +54,7 @@ router.get('/fechar_pedido', async (req, res) => {
     try {
         await knex.transaction(async function (trx) {
             let { id_dono } = await pedido.obterMesaPorIdPedido(trx, id_pedido);
-            await pedido.addOuAtualizarVenda(trx, id_pedido, total, data, qt_pago, fechado, nota, sugestao);
+            await pedido.addOuAtualizarVenda(trx, id_pedido, total, data, qt_pago, fechado, id_forma, nota, sugestao);
             //disponibilizar mesa caso fechado=0
             !fechado ? await pedido.alterarEmUsoMesa(trx, id_dono, fechado) : '';
         });
@@ -70,6 +70,18 @@ router.get('/obter_formas_pagamento', async (req, res) => {
         let pedido = req.app.get('pedido');
         let knex = req.app.get('knex');
         let itens = await pedido.obterFormasPagamento(knex);
+        res.send(itens);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err.message);
+    }
+});
+
+router.get('/obter_parciais_pedido', async (req, res) => {
+    try {
+        let pedido = req.app.get('pedido');
+        let knex = req.app.get('knex');
+        let itens = await pedido.obterParciaisPedido(id_pedido, itensSelect, where);
         res.send(itens);
     } catch (err) {
         console.log(err);

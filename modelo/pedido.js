@@ -59,6 +59,16 @@ class Pedido {
         let item = await query;
         return item;
     }
+
+    async obterParciaisPedido() {
+        let query = knex('venda').join('formas_pagamento', 'venda.id_forma', '=', 'formas_pagamento.id_forma');
+        if (itensSelect)
+            query.select(itensSelect);
+        if (where)
+            query.where(where);
+        let result = await query;
+        return result;
+    }
 }
 exports.Pedido = Pedido;
 
