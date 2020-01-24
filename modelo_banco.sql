@@ -1,3 +1,4 @@
+INSERT INTO `spetto`.`pagamento` (`nome`) VALUES ('Dinheiro');
 alter table pedido add column id_dono int not null 
 create table Spetto.dono_pedido(
 	id_dono int not null auto_increment,
