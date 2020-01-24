@@ -17,13 +17,6 @@ class Pedido {
                 where p.id_praca = 1
          */
     }
-<<<<<<< HEAD
-    /*
-    async addPedido(trx, id_dono) {
-        const idPedido = await trx('pedido').insert({ id_dono: id_dono, data_pedido: new Date().toISOString() });
-        return utils.firstOrDefault(idPedido);
-    }*/
-=======
 
     async addOuAtualizarVenda(trx, id_pedido, total, data, qt_pago, fechado, id_forma, nota, sugestao) {
         let temVendaCadastrada = await trx('venda').where({ id_pedido });
@@ -36,7 +29,6 @@ class Pedido {
             await trx('formas_pagamento').insert({ id_pedido, id_forma, valor: qt_pago })
         }
     }
->>>>>>> c0a9e50b8f95bb38de7bf1660d6025e8e355a406
 
     async addCliente(knex, nome, telefone, fiel) {
         const idDono = await knex('dono_pedido').insert({});
