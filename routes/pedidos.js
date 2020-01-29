@@ -45,8 +45,8 @@ router.post('/post_pedido_itens', async function (req, res, next) {
     }
 })
 
-router.get('/fechar_pedido', async (req, res) => {
-    const { id_pedido, id_forma, total, qt_pago, fechado, nota, sugestao } = req.query;
+router.post('/fechar_pedido', async (req, res) => {
+    const { id_pedido, id_forma, total, qt_pago, fechado, nota, sugestao } = req.body;
     let data = utils.get_date_mysql(new Date().toISOString());
     let pedido = req.app.get('pedido');
     let knex = req.app.get('knex');
@@ -56,7 +56,7 @@ router.get('/fechar_pedido', async (req, res) => {
             let { id_dono } = await pedido.obterMesaPorIdPedido(trx, id_pedido);
             await pedido.addOuAtualizarVenda(trx, id_pedido, total, data, qt_pago, fechado, id_forma, nota, sugestao);
             //disponibilizar mesa caso fechado=0
-            !fechado ? await pedido.alterarEmUsoMesa(trx, id_dono, fechado) : '';
+            fechado ? await pedido.alterarEmUsoMesa(trx, id_dono, !fechado) : '';
         });
         res.send(200);
     } catch (err) {
