@@ -64,8 +64,8 @@ class ItensPedido {
         else 
             if (!produtos)
                 retorno = await trx.from('itens_pedido')
-                    .join('venda', 'itens_pedido.id_pedido', '=', 'venda.id_pedido')
-                    .where('venda.fechado', '<>', '1')
+                    //.leftJoin('venda', 'itens_pedido.id_pedido', '=', 'venda.id_pedido')
+                    //.where('venda.fechado', '<>', '1')
                     .where('itens_pedido.id_pedido', id_pedido)
             else 
                 retorno = await trx.from('itens_pedido')
