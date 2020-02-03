@@ -56,7 +56,7 @@ class ItensPedido {
                 const prod = produtos[i];
                 let consulta = await trx.from('itens_pedido')
                     .join('produto', 'itens_pedido.id_produto', '=', 'produto.id_produto')
-                    .where('id_pedido', id_pedido)
+                    .where('itens_pedido.id_pedido', id_pedido)
                     .where('itens_pedido.id_produto', prod.id_produto)
                     .where('ordem', prod.ordem);
                 retorno.push(utils.firstOrDefault(consulta));
@@ -64,10 +64,14 @@ class ItensPedido {
         else 
             if (!produtos)
                 retorno = await trx.from('itens_pedido')
-                    .where('id_pedido', id_pedido)
+                    .join('venda', 'itens_pedido.id_pedido', '=', 'venda.id_pedido')
+                    .where('venda.fechado', '<>', '1')
+                    .where('itens_pedido.id_pedido', id_pedido)
             else 
                 retorno = await trx.from('itens_pedido')
-                    .where('id_pedido', id_pedido)
+                    //.join('venda', 'itens_pedido.id_pedido', '=', 'venda.id_pedido')
+                    //.where('venda.fechado', '<>', '1')
+                    .where('itens_pedido.id_pedido', id_pedido)
                     .where('itens_pedido.id_produto', produtos)
         return retorno;
     }
