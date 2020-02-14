@@ -18,14 +18,14 @@ class DonoPedido {
     }
 
     async obterMesa(knex, num_mesa) {
-        let query = await knex.raw(`
+        let query = await knex.raw(`            
             select don.id_dono, m.id_mesa, em_uso, data_pedido, ped.id_pedido from mesa m
-            join dono_pedido don on m.id_dono = don.id_dono
-            left join pedido ped on ped.id_dono = don.id_dono 
-            left join venda vend on vend.id_pedido = ped.id_pedido and vend.fechado <> 1
-            ${num_mesa ? `m.num_mesa=${num_mesa}`: ''}
-            order by em_uso desc`);
-        return query ?  query[0] : [];
+                join dono_pedido don on m.id_dono = don.id_dono
+                left join pedido ped on ped.id_dono = don.id_dono
+                and ped.id_pedido not in (select id_pedido from venda where venda.fechado = 1)
+                ${num_mesa ? `m.num_mesa=${num_mesa}` : ''}
+                order by em_uso desc`);
+        return query ? query[0] : [];
     }
 
     async obterCliente(knex, idCliente) {
