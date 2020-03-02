@@ -61,12 +61,12 @@ class Pedido {
         return item;
     }
 
-    async obterParciaisPedido() {
-        let query = knex('venda').join('formas_pagamento', 'venda.id_forma', '=', 'formas_pagamento.id_forma');
+    async obterParciaisPedido(itensSelect, where) {
+        let query = this.knex('venda').join('formas_pagamento', 'venda.id_pedido', '=', 'formas_pagamento.id_pedido');
         if (itensSelect)
             query.select(itensSelect);
         if (where)
-            query.where(where);
+            query.whereRaw(where);
         let result = await query;
         return result;
     }

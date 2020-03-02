@@ -58,7 +58,6 @@ class ItensPedido {
                     .join('produto', 'itens_pedido.id_produto', '=', 'produto.id_produto')
                     .where('itens_pedido.id_pedido', id_pedido)
                     .where('itens_pedido.id_produto', prod.id_produto)
-             //       .whereRaw('')
                     .where('ordem', prod.ordem);
                 retorno.push(utils.firstOrDefault(consulta));
             }

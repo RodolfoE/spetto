@@ -77,11 +77,14 @@ router.get('/obter_formas_pagamento', async (req, res) => {
     }
 });
 
+/**
+ * itensSelect: Array ['id as identidade'...]
+ */
 router.get('/obter_parciais_pedido', async (req, res) => {
     try {
+        const { itensSelect, id_pedido } = req.query;
         let pedido = req.app.get('pedido');
-        let knex = req.app.get('knex');
-        let itens = await pedido.obterParciaisPedido(id_pedido, itensSelect, where);
+        let itens = await pedido.obterParciaisPedido(itensSelect, `venda.id_pedido=${id_pedido}`);
         res.send(itens);
     } catch (err) {
         console.log(err);
@@ -166,5 +169,18 @@ router.post('/cadastrar_mesa', async (req, res) => {
         res.status(500).send(err.message);
     }
 })
+
+router.get('/obter_valores_pedido', async (req, res) => {
+    let { id_pedido } = req.query;
+    try {
+        let knex = req.app.get('knex');
+        let pedido = req.app.get('pedido');
+        const mesa = await pedido.addMesa(knex, id_mesa);
+        res.send({ id_dono: mesa });
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send(err.message);
+    }
+});
 
 module.exports = router;
