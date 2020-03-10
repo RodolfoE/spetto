@@ -39,7 +39,7 @@ var knex = require('knex')({
   connection: {
     host: "localhost",
     user: "root",
-    password: "556556",
+    password: "Rodolfo$556556",
     database: "Spetto"
   },
   pool: {

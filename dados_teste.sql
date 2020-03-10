@@ -1,3 +1,25 @@
+ALTER TABLE `Spetto`.`preco` 
+CHANGE COLUMN `valor` `valor` FLOAT NOT NULL ;
+
+
+ALTER TABLE `Spetto`.`pedido` 
+CHANGE COLUMN `data_pedido` `data_pedido` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ;
+
+ALTER TABLE `Spetto`.`usuario` 
+DROP FOREIGN KEY `usuario_ibfk_1`,
+DROP FOREIGN KEY `usuario_ibfk_2`;
+ALTER TABLE `Spetto`.`usuario` 
+CHANGE COLUMN `id_endereco` `id_endereco` INT(11) NULL ,
+CHANGE COLUMN `id_contato` `id_contato` INT(11) NULL ;
+ALTER TABLE `Spetto`.`usuario` 
+ADD CONSTRAINT `usuario_ibfk_1`
+  FOREIGN KEY (`id_endereco`)
+  REFERENCES `Spetto`.`endereco` (`id_endereco`),
+ADD CONSTRAINT `usuario_ibfk_2`
+  FOREIGN KEY (`id_contato`)
+  REFERENCES `Spetto`.`contato` (`id_contato`);
+
+
 INSERT INTO `Spetto`.`dono_pedido` () VALUES ();
 select * from dono_pedido
 INSERT INTO `Spetto`.`cliente` (`id_dono`, `nome`) VALUES (1, "Biridin");

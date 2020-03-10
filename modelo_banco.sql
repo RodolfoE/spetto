@@ -1,3 +1,5 @@
+alter table cliente add column em_uso int default 0
+alter table cliente_delivery add column em_uso int default 0
 INSERT INTO `spetto`.`pagamento` (`nome`) VALUES ('Dinheiro');
 alter table mesa add column em_uso int default 0
 alter table pedido add column id_dono int not null 
