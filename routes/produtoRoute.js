@@ -16,13 +16,13 @@ router.get('/get_produtos', async function (req, res, next) {
 });
 
 router.post('/post_produto', async function (req, res, next) {
-    const { nome, id_praca, preco } = req.body;
+    const { nome, id_praca, valor, valor_de_custo, categoria } = req.body;
     let trx;
     try {
         let knex = req.app.get('knex');
         const produto = req.app.get('produto');
         trx = await knex.transaction();
-        await produto.cadastrarProduto(trx, nome, id_praca, preco);
+        await produto.cadastrarProduto(trx, nome, id_praca, valor, valor_de_custo, categoria);
         await trx.commit();
         res.status(200);
     } catch (err) {

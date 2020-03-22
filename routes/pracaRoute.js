@@ -41,4 +41,16 @@ router.get('/pedido_concluido', async function (req, res, next) {
     }
 });
 
+router.get('/get_pracas', async (req, res, next) => {
+    try{
+        let praca = req.app.get('praca');
+        let pracas = await praca.obterPracas();
+        res.send(pracas);
+    } catch (err){
+        console.log(err.message);
+        res.status(500).send(err.message);
+    }
+    
+});
+
 module.exports = router;

@@ -20,5 +20,14 @@ class Praca {
             .where({ id_pedido: id_pedido, id_produto: id_produto, ordem: ordem })
             .update({ id_responsavel_cozinha: id_responsavel_cozinha, data_inicio_cozinha: utils.get_date_mysql(new Date().toISOString()) })
     }
+
+    async obterPracas(){
+        let query = this.knex.from('praca').orderBy('nome');
+        let retorno = [];
+        let valores = await query;
+        retorno.push({nome: "Selecione", id_praca: null})
+        valores.forEach(x => retorno.push(x));
+        return retorno;
+    }
 }
 exports.Praca = Praca;

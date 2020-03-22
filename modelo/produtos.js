@@ -4,7 +4,7 @@ class Produto {
         this.knex = knex;
     }
 
-    async cadastrarProduto(trx, nome, id_praca, preco) {
+    async cadastrarProduto(trx, nome, id_praca, valor, valor_de_custo, categoria) {
         //se não houver nome, não permitir o cadastro.
         if (!nome) {
             throw Error('Não é possível cadastrar produto sem um nome');
@@ -19,7 +19,7 @@ class Produto {
         //let id_produto = await trx('produto').insert({ nome: nome, id_praca: id_praca }).returning('id_produto');
         let id_produto = await trx('produto').insert({ nome: nome, id_praca: id_praca });
         //let id_preco = await trx('preco').insert({ id_produto: id_produto, valor: preco, dataCorrente: utils.get_date_mysql(new Date().toISOString()) }).returning('id_preco');
-        let id_preco = await trx('preco').insert({ id_produto: id_produto[0], valor: preco, dataCorrente: utils.get_date_mysql(new Date().toISOString()) });
+        let id_preco = await trx('preco').insert({ id_produto: id_produto[0], valor, valor_de_custo, dataCorrente: utils.get_date_mysql(new Date().toISOString()) });
         return { id_produto, id_preco };
     }
 
