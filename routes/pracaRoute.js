@@ -42,15 +42,26 @@ router.get('/pedido_concluido', async function (req, res, next) {
 });
 
 router.get('/get_pracas', async (req, res, next) => {
-    try{
+    try {
         let praca = req.app.get('praca');
         let pracas = await praca.obterPracas();
         res.send(pracas);
-    } catch (err){
+    } catch (err) {
         console.log(err.message);
         res.status(500).send(err.message);
     }
-    
+});
+
+router.post('/post_praca', async (req, res, next) => {
+    try {
+        const { id_responsavel, nome } = req.body;
+        let praca = req.app.get('praca');
+        await praca.cadastrarPraca(id_responsavel, nome);
+        res.sendStatus(200);
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send(err.message);
+    }
 });
 
 module.exports = router;

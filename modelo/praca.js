@@ -29,5 +29,10 @@ class Praca {
         valores.forEach(x => retorno.push(x));
         return retorno;
     }
+
+    async cadastrarPraca(id_responsavel, nome){
+        let query = this.knex('praca').insert({nome, id_responsavel});
+        await query;
+    }
 }
 exports.Praca = Praca;
