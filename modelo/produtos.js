@@ -36,7 +36,7 @@ class Produto {
             let condicoes = Object.keys(where);
             for (let i = 0; i < condicoes.length; i++) {
                 const element = condicoes[i];
-                whereClause += element + " like " + "'%" + where[element] + "%'";
+                whereClause += where[element] == "null" ? element + " is null" : element + " like " + "'%" + where[element] + "%'";
                 if (i != condicoes.length - 1) {
                     whereClause += ' AND ';
                 }
@@ -44,7 +44,7 @@ class Produto {
         }
         return await this.knex.raw(`select ${select ? select : '*'} from 
              produto p join preco r on p.id_produto = r.id_produto
-             AND dataCorrente = (select max(dataCorrente) from preco where id_produto = p.id_produto) 
+             AND dataCorrente = (select max(dataCorrente) from preco where id_produto = p.id_produto)
              ${whereClause}
              order by dataCorrente DESC`);
     }
