@@ -40,3 +40,26 @@ CLOSE dias;
 DEALLOCATE dias;
 select * from @reqHrs
 select * from @mediaDasRequisicoes
+
+
+
+/*ENDPOINT mais usados, erros mais comuns e informações detalhadas dos endpoints*/
+
+select
+url, count (url) as 'Número de Requisições', 
+CAST((100 * (CAST(count (url) as float) / CAST((select count (Id) as qtd from logs where url not in ('/login', '/')  AND status = '200') as float))) as NUMERIC(10, 3)) as '% Total'
+from logs where url not in ('/login', '/', '/home') AND status = '200'
+group by url order by 'Número de Requisições' desc
+
+select
+url, status,  count (url) as 'Número de Requisições', 
+CAST((100 * (CAST(count (url) as float) / CAST((select count (Id) as qtd from logs where url not in ('/login', '/')  AND status not in('200', '302', '304')) as float))) as NUMERIC(10, 3)) as '% De Erro'
+from logs where url not in ('/login', '/', '/home') AND status not in('200', '302', '304')
+group by url, status order by 'Número de Requisições' desc
+
+
+select logs.*, usr.Nome from logs
+left join [ElasticQuery-Runner].dbo.Usuarios usr on logs.Id_Usuario = usr.Id
+where
+url like '%/get_cli_inst_tag%' 
+AND status not in('200', '302', '304')
